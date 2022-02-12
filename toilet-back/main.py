@@ -51,7 +51,15 @@ def end(room_number: int):
 
 @app.get("/room-status/{room_number}")
 def room_status(room_number: int):
-    pass
+    room = collection.find({"room": room_number}).sort("_id", -1)[0]
+    
+    return {
+        "room": room["room"],
+        "empty": room["empty"],
+        "start": room["start"],
+        "end": room["end"],
+        "total_time": room["total_time"]
+    }
 
 @app.get("/estimate")
 def estimate():
