@@ -48,3 +48,11 @@ def end(room_number: int):
     return {
         "msg": f"{room_number} is empty"
     }
+
+@app.get("/room-status/{room_number}")
+def room_status(room_number: int):
+    pass
+
+@app.get("/estimate")
+def estimate():
+    pass
