@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
 from pydantic import BaseModel
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 MAXIMUM_ROOM = 3
 
@@ -9,6 +10,19 @@ app = FastAPI()
 client = MongoClient('mongodb://localhost', 27017)
 db = client["mini-project"]
 collection = db["room"]
+
+
+origins = [
+    '*'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/start/{room_number}")
