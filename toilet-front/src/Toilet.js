@@ -14,6 +14,9 @@ const Toilet = () => {
   }, [roomID])
 
   async function RoomStatus(id) {
+  // var config = {
+  //   headers: {'Access-Control-Allow-Origin': '*'}
+  // };
   const res = await axios.get(
     `https://ecourse.cpe.ku.ac.th/exceed03/api/room-status/1`
     )
@@ -22,7 +25,6 @@ const Toilet = () => {
 
   return (
     <div>
-      test
       { detail }
     </div>
   )
