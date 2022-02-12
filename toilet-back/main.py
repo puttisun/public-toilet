@@ -16,7 +16,7 @@ def start(room_number: int):
     now = datetime.now()
     collection.insert_one({
         "room": room_number,
-        "empty": 0,
+        "done": 0,
         "start": now.strftime("%Y-%m-%d %H:%M:%S"),
         "end": None,
         "total_time": None
@@ -39,6 +39,7 @@ def end(room_number: int):
             }, 
             {
                 "$set": {
+                    "done": 1,
                     "end": now.strftime("%Y-%m-%d %H:%M:%S"),
                     "total_time": (now - datetime.strptime(room["start"], "%Y-%m-%d %H:%M:%S")).total_seconds()
                 }
@@ -55,7 +56,7 @@ def room_status(room_number: int):
     
     return {
         "room": room["room"],
-        "empty": room["empty"],
+        "done": room["done"],
         "start": room["start"],
         "end": room["end"],
         "total_time": room["total_time"]
@@ -63,4 +64,16 @@ def room_status(room_number: int):
 
 @app.get("/estimate")
 def estimate():
-    pass
+    """Average time of all completed session in seconds."""
+    room = collection.find({"done": 1})
+
+    total_time = 0
+    count = 0
+    for r in room:
+        total_time += r["total_time"]
+        count += 1
+
+    return {
+        "estimate": total_time / count,
+        "completed_session": count
+    }
